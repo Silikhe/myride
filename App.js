@@ -1,16 +1,22 @@
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import RootStackScreen from "./app/screens/RootStackScreen";
+import { NavigationContainer } from "@react-navigation/native";
+// import RootStackScreen from "./app/screens/RootStackScreen";
 
 export default function App() {
   return (
-    <RootStackScreen>
+    <NavigationContainer>
       <View style={styles.container}>
         <Text>Silikhe</Text>
         <StatusBar style="auto" />
       </View>
-    </RootStackScreen>
+    </NavigationContainer>
+
+    // <RootStackScreen>
+
+    // </RootStackScreen>
   );
 }
 
