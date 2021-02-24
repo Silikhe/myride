@@ -1,30 +1,35 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
-// import RootStackScreen from "./app/screens/RootStackScreen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import RootStackScreen from "./app/screens/RookStackScreen";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+function App() {
   return (
     <NavigationContainer>
-      <View style={styles.container}>
-        <Text>Silikhe</Text>
-        <StatusBar style="auto" />
-      </View>
+      <RootStackScreen />
+      {/* <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#B48900",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "Bold",
+          },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="login" component={SignInScreen} />
+      </Stack.Navigator> */}
     </NavigationContainer>
-
-    // <RootStackScreen>
-
-    // </RootStackScreen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;

@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-
-export default function SignUpScreen() {
+RookStackScreen;
+export default function HomeScreen({ navigation }) {
   return (
     <View
       style={{
@@ -10,7 +9,7 @@ export default function SignUpScreen() {
         justifyContent: "center",
       }}
     >
-      <Text>Signup Screen</Text>
+      <Text>Home Screen</Text>
       <Button
         title="Next Screen"
         onPress={() => navigation.navigate("login")}
