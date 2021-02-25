@@ -11,12 +11,24 @@ import {
   Image,
   Button,
 } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
+SplashScreen.preventAutoHideAsync()
+  .then((result) =>
+    console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`)
+  )
+  .catch(console.warn);
 
-export default function SplashScreen({ navigation }) {
+export default function SplashScreens({ navigation }) {
+  React.useEffect(() => {
+    setTimeout(async () => {
+      await SplashScreen.hideAsync();
+      console.log("done");
+    }, 1000); // <-- Set this to `5000` ms to hide it after 5 seconds
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,17 +37,11 @@ export default function SplashScreen({ navigation }) {
           style={styles.logo}
           resizeMode="stretch"
         />
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.title}>Travel with convinience!</Text>
-        {/* <TouchableOpacity onPress={}> */}
         <Button
           style={styles.signIn}
           title="Tour Now"
           onPress={() => navigation.navigate("SignInScreen")}
         />
-        {/* <LinearGradient colors={{'#B48900', '#B48902'}}></LinearGradient> */}
-        {/* </TouchableOpacity> */}
       </View>
     </View>
   );

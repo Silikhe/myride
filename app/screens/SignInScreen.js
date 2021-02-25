@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Platform,
   Text,
+  TouchableOpacity,
   View,
   TextInput,
   Button,
@@ -109,12 +110,72 @@ export default function SignInScreen({ navigation }) {
           <Feather name="check-circle" color="#B48900" size={2} />
         </View>
         <View style={styles.button}>
-          <Button
-            color="#B48900"
-            title="Sign Up"
+          {/* <TouchableOpacity
             style={styles.signIn}
+            onPress={() => {
+              loginHandle(data.username, data.password);
+            }}
+          >
+            <LinearGradient
+              colors={["#08d4c4", "#01ab9d"]}
+              style={styles.signIn}
+            >
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#fff",
+                  },
+                ]}
+              >
+                Sign In
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("launcher")}
+            style={[
+              styles.signIn,
+              {
+                borderColor: "#B48900",
+                borderWidth: 1,
+                marginTop: 15,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: "#B48900",
+                },
+              ]}
+            >
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => navigation.navigate("SignUpScreen")}
-          />
+            style={[
+              styles.signIn,
+              {
+                borderColor: "#B48900",
+                borderWidth: 1,
+                marginTop: 15,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: "#B48900",
+                },
+              ]}
+            >
+              Sign In
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

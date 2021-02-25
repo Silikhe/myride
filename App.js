@@ -6,12 +6,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import RootStackScreen from "./app/screens/RookStackScreen";
+import LaunchScreen from "./app/screens/LaunchScreen";
 
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
+      {/* <Stack.Screen name="LaunchScreen" component={LaunchScreen} /> */}
       <RootStackScreen />
       {/* <Stack.Navigator
         screenOptions={{
