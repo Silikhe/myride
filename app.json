@@ -16,6 +16,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "dependencies": {
+      "expo-location": "~10.0.0",
+      "expo-constants": "~9.3.3"
+    },
     "ios": {
       "supportsTablet": true
     },
