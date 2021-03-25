@@ -1,34 +1,19 @@
 import React from "react";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+// import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {
-  View,
-  Text,
-  TouchableOpacity,
   Dimensions,
   StyleSheet,
   StatusBar,
   Image,
   Button,
+  View,
 } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-
-const Stack = createStackNavigator();
-SplashScreen.preventAutoHideAsync()
-  .then((result) =>
-    console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`)
-  )
-  .catch(console.warn);
 
 export default function SplashScreens({ navigation }) {
-  React.useEffect(() => {
-    setTimeout(async () => {
-      await SplashScreen.hideAsync();
-      console.log("done");
-    }, 1000); // <-- Set this to `5000` ms to hide it after 5 seconds
-  }, []);
+  setTimeout(() => {
+    navigation.navigate("phone");
+  }, 3000);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,11 +21,6 @@ export default function SplashScreens({ navigation }) {
           source={require("../assets/icon.png")}
           style={styles.logo}
           resizeMode="stretch"
-        />
-        <Button
-          style={styles.signIn}
-          title="Tour Now"
-          onPress={() => navigation.navigate("SignInScreen")}
         />
       </View>
     </View>

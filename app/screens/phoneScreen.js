@@ -10,38 +10,44 @@ import {
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-
-export default function SignUpScreen({ navigation, route }) {
+export default function phoneScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [id, setId] = React.useState();
-  // setId(1);
-  // alert(id);
 
-  const userLogin = (props) => {
-    // alert("ok");
-    fetch("http://192.168.122.1/myride/api/api/login", {
+  const userPhone = () => {
+    () => navigation.navigate("location");
+    // alert(phoneNumber);
+    fetch("http://192.168.122.1/myride/api/api/phone", {
       method: "post",
       header: {
         Accept: "application/json",
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        phoneNumber: phoneNumber,
       }),
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // var id = 1;
         var myJSON = JSON.stringify(responseJson);
-        // alert(myJSON[0].message);
-        if (myJSON) {
-          alert("Incorrect username or password.");
-          console.log("you are remaining on this screen");
-          navigation.push("location");
+
+        if (myJSON != { phoneNumber: { phoneNumber: phoneNumber } }) {
+          navigation.navigate("SignUpScreen");
+          // alert("Yess");
+        } else {
+          navigation.navigate("SignInScreen");
         }
+        // if {"phoneNumber":{"phoneNumber":"+254706745581"}}) {
+        //   showMessage("Something is bad", "This username is already taken");
+        // } else {
+        //   this.props.navigator.push({
+        //     name: "contacts",
+        //     password: this.state.password,
+        //     id: id,
+        //     username: this.state.username,
+        //   });
+        // }
       })
       .catch((error) => {
         console.error(error);
@@ -59,8 +65,8 @@ export default function SignUpScreen({ navigation, route }) {
   });
 
   const textInputChange = (val) => {
-    setUsername(val);
-    if (val.length !== 0) {
+    setPhoneNumber(val);
+    if (val.includes("+254")) {
       setData({
         ...data,
         username: val,
@@ -69,38 +75,22 @@ export default function SignUpScreen({ navigation, route }) {
     } else {
       setData({
         ...data,
-        username: val,
         check_textInputChange: false,
       });
     }
   };
 
-  const handlePasswordChange = (val) => {
-    setPassword(val);
-    setData({
-      ...data,
-      password: val,
-    });
-  };
-
-  const updateSecureTextEntry = () => {
-    setData({
-      ...data,
-      secureTextEntry: !data.secureTextEntry,
-    });
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.text_header}>SignIn to take a ride</Text>
+        <Text style={styles.text_header}>Enter phone number to continue</Text>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.text_footer}>Username</Text>
+        <Text style={styles.text_footer}>Phone Number</Text>
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#c4c4c4" size={20} />
           <TextInput
-            placeholder="Your Username"
+            placeholder="+254 706 745581"
             style={styles.textInput}
             autoCapitalize="none"
             onChangeText={(val) => textInputChange(val)}
@@ -112,63 +102,9 @@ export default function SignUpScreen({ navigation, route }) {
           ) : null}
         </View>
 
-        <Text
-          style={[
-            styles.text_footer,
-            {
-              marginTop: 25,
-            },
-          ]}
-        >
-          Password
-        </Text>
-        <View style={styles.action}>
-          <FontAwesome name="lock" color="#c4c4c4" size={20} />
-          <TextInput
-            placeholder="Your Password"
-            secureTextEntry={data.secureTextEntry ? true : false}
-            autoCapitalize="none"
-            onChangeText={(val) => handlePasswordChange(val)}
-            style={[
-              styles.textInput,
-              {
-                color: "#c4c4c4",
-              },
-            ]}
-          />
-          <TouchableOpacity onPress={updateSecureTextEntry}>
-            {data.secureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
-            ) : (
-              <Feather name="eye" color="red" size={20} />
-            )}
-          </TouchableOpacity>
-        </View>
         <View style={styles.button}>
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate("location")}
-            style={[
-              styles.signIn,
-              {
-                borderColor: "#B48900",
-                borderWidth: 1,
-                marginTop: 15,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.textSign,
-                {
-                  color: "#B48900",
-                },
-              ]}
-            >
-              Register
-            </Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
-            onPress={() => userLogin()}
+            onPress={() => userPhone()}
             style={[
               styles.signIn,
               {
@@ -186,7 +122,7 @@ export default function SignUpScreen({ navigation, route }) {
                 },
               ]}
             >
-              Sign In
+              Continue
             </Text>
           </TouchableOpacity>
         </View>
@@ -211,8 +147,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingHorizontal: 40,
+    paddingVertical: 120,
   },
   text_header: {
     color: "#fff",
@@ -221,11 +157,11 @@ const styles = StyleSheet.create({
   },
   text_footer: {
     color: "#05375a",
-    fontSize: 17,
+    fontSize: 18,
   },
   action: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5,

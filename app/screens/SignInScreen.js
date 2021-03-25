@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Platform,
@@ -6,34 +6,160 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Alert,
   Button,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 
 export default function SignInScreen({ navigation }) {
+  console.log("signIn Screen");
+  // send data
+
+  // const [isSubmit, setSubmit] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+
+  //Set visibility
+  function Vissibility(props) {
+    const [isVisible, setIsVisible] = useState(true);
+    const [children, setChildren] = useState(props.children);
+
+    useEffect(() => {
+      setChildren(props.children);
+      setIsVisible(true);
+      setTimer(props.delay);
+    }, [props.children]);
+
+    const setTimer = (delay) => {
+      setTimeout(() => setIsVisible(false), delay);
+    };
+
+    return isVisible ? <div>{children}</div> : <span />;
+  }
+
+  const userRegister = (prop) => {
+    fetch("http://192.168.122.1/myride/api/api/register", {
+      method: "post",
+      header: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        var myJSON = JSON.stringify(responseJson);
+        if (JSON) {
+          navigation.navigate("location");
+        }
+        //else {
+        //   // navigation.navigate("location");
+        //   Alert.alert("This username or email address has already been taken");
+        // }
+        // Alert.alert(JSON);
+        // navigation.navigate("location");
+        // setTimeout(
+        //   () => setMessage({ message: "Yeey will dissapear in 2 sec" }),
+        //   2000
+        // );
+        Alert.alert(myJSON);
+        console.log(myJSON);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  //end
+
+  const [data, setData] = useState({
+    username: "",
+    password: "",
+    confirm_password: "",
+    check_textInputChange: false,
+    secureTextEntry: true,
+    confirm_secureTextEntry: true,
+  });
+
+  const textInputChange = (val) => {
+    setUsername(val);
+    if (val.length >= 3) {
+      setData({
+        ...data,
+        username: val,
+        check_textInputChange: true,
+      });
+    } else {
+      setData({
+        ...data,
+        username: val,
+        check_textInputChange: false,
+      });
+    }
+  };
+
+  const onEmailChange = (val) => {
+    setEmail(val);
+    if (val.includes("@" && ".com")) {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChang: true,
+      });
+    } else {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChang: false,
+      });
+    }
+  };
+
+  const handlePasswordChange = (val) => {
+    setPassword(val);
+    setData({
+      ...data,
+      password: val,
+    });
+  };
+
+  const updateSecureTextEntry = () => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.text_header}>Signup to continue</Text>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.text_footer}>User</Text>
+        {/* <Text style={styles.text_footer}>{message}</Text> */}
+        <Text style={styles.text_footer}>Username</Text>
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#c4c4c4" size={20} />
           <TextInput
             placeholder="Your Username"
-            placeholderTextColor="#666666"
-            style={[
-              styles.textInput,
-              {
-                color: "#c4c4c4",
-              },
-            ]}
+            style={styles.textInput}
+            autoCapitalize="none"
+            onChangeText={(val) => textInputChange(val)}
           />
-          <Feather name="check-circle" color="#B48900" size={2} />
+          {data.check_textInputChange ? (
+            <View>
+              <Feather name="check-circle" color="green" size={20} />
+            </View>
+          ) : null}
         </View>
-
         <Text
           style={[
             styles.text_footer,
@@ -49,6 +175,7 @@ export default function SignInScreen({ navigation }) {
           <TextInput
             placeholder="Your Email"
             placeholderTextColor="#666666"
+            onChangeText={(val) => onEmailChange(val)}
             style={[
               styles.textInput,
               {
@@ -56,10 +183,14 @@ export default function SignInScreen({ navigation }) {
               },
             ]}
           />
-          <Feather name="eye-off" color="red" size={2} />
+          {data.check_textInputChang ? (
+            <View>
+              <Feather name="check-circle" color="green" size={20} />
+            </View>
+          ) : null}
         </View>
 
-        <Text
+        {/* <Text
           style={[
             styles.text_footer,
             {
@@ -68,8 +199,8 @@ export default function SignInScreen({ navigation }) {
           ]}
         >
           Phone Number
-        </Text>
-        <View style={styles.action}>
+        </Text> */}
+        {/* <View style={styles.action}>
           <FontAwesome name="phone" color="#c4c4c4" size={20} />
           <TextInput
             placeholder="Your Phone number"
@@ -81,8 +212,7 @@ export default function SignInScreen({ navigation }) {
               },
             ]}
           />
-          <Feather name="lock" color="#B48900" size={2} />
-        </View>
+        </View> */}
 
         <Text
           style={[
@@ -97,9 +227,10 @@ export default function SignInScreen({ navigation }) {
         <View style={styles.action}>
           <FontAwesome name="lock" color="#c4c4c4" size={20} />
           <TextInput
-            secureTextEntry={true}
             placeholder="Your Password"
-            placeholderTextColor="#666666"
+            secureTextEntry={data.secureTextEntry ? true : false}
+            autoCapitalize="none"
+            onChangeText={(val) => handlePasswordChange(val)}
             style={[
               styles.textInput,
               {
@@ -107,33 +238,19 @@ export default function SignInScreen({ navigation }) {
               },
             ]}
           />
-          <Feather name="check-circle" color="#B48900" size={2} />
+          <TouchableOpacity onPress={updateSecureTextEntry}>
+            {data.secureTextEntry ? (
+              <Feather name="eye-off" color="grey" size={20} />
+            ) : (
+              <Feather name="eye" color="red" size={20} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={styles.button}>
-          {/* <TouchableOpacity
-            style={styles.signIn}
-            onPress={() => {
-              loginHandle(data.username, data.password);
-            }}
-          >
-            <LinearGradient
-              colors={["#08d4c4", "#01ab9d"]}
-              style={styles.signIn}
-            >
-              <Text
-                style={[
-                  styles.textSign,
-                  {
-                    color: "#fff",
-                  },
-                ]}
-              >
-                Sign In
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate("launcher")}
+            onPress={() => {
+              userRegister();
+            }}
             style={[
               styles.signIn,
               {
@@ -151,10 +268,10 @@ export default function SignInScreen({ navigation }) {
                 },
               ]}
             >
-              Sign Up
+              Register
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate("SignUpScreen")}
             style={[
               styles.signIn,
@@ -175,7 +292,7 @@ export default function SignInScreen({ navigation }) {
             >
               Sign In
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>
@@ -191,7 +308,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     paddingHorizontal: 20,
-    paddingBottom: 50,
+    paddingBottom: "10%",
   },
   footer: {
     flex: 3,
@@ -212,7 +329,7 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5,
@@ -236,7 +353,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 8,
   },
   signIn: {
     width: "100%",
