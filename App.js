@@ -1,21 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import React from "react";
+import Icon from "react-native-vector-icons/Feather";
+import { NavigationContainer } from "@react-navigation/native";
+import RootStackScreen from "./app/screens/RookStackScreen";
+import DrawerNavigator from "./app/components/drawer";
 
-export default function App() {
+// const Drawer = createDrawerNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      {/* <DrawerT.Navigator>
+        <DrawerT.Screen name="Home" component={RootStackScreen} />
+      </DrawerT.Navigator> */}
+      <DrawerNavigator />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
