@@ -5,9 +5,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  prompt,
   TextInput,
   Button,
 } from "react-native";
+import Phone from "../components/phone";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 export default function phoneScreen({ navigation }) {
@@ -16,42 +18,47 @@ export default function phoneScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const userPhone = () => {
-    () => navigation.navigate("location");
-    // alert(phoneNumber);
     fetch("http://192.168.122.1/myride/api/api/phone", {
-      method: "post",
+      method: "GET",
       header: {
         Accept: "application/json",
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        phoneNumber: phoneNumber,
-      }),
     })
       .then((response) => response.json())
       .then((responseJson) => {
         var myJSON = JSON.stringify(responseJson);
-
-        if (myJSON != { phoneNumber: { phoneNumber: phoneNumber } }) {
+        // alert(myJSON);
+        if (myJSON === []) {
           navigation.navigate("SignUpScreen");
-          // alert("Yess");
         } else {
           navigation.navigate("SignInScreen");
         }
-        // if {"phoneNumber":{"phoneNumber":"+254706745581"}}) {
-        //   showMessage("Something is bad", "This username is already taken");
-        // } else {
-        //   this.props.navigator.push({
-        //     name: "contacts",
-        //     password: this.state.password,
-        //     id: id,
-        //     username: this.state.username,
-        //   });
-        // }
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .done();
+    // fetch("http://192.168.122.1/myride/api/api/phone", {
+    //   method: "get",
+    //   header: {
+    //     Accept: "application/json",
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     phoneNumber: phoneNumber,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     var myJSON = JSON.stringify(responseJson);
+    //     console.log(myJSON);
+    //     if (myJSON === []) {
+    //       navigation.navigate("SignInScreen");
+    //     } else {
+    //       navigation.navigate("SignUpScreen");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   //end
@@ -80,6 +87,10 @@ export default function phoneScreen({ navigation }) {
     }
   };
 
+  (function () {
+    return <Phone />;
+  })();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -90,7 +101,7 @@ export default function phoneScreen({ navigation }) {
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#c4c4c4" size={20} />
           <TextInput
-            placeholder="+254 706 745581"
+            placeholder="+254 700 00000"
             style={styles.textInput}
             autoCapitalize="none"
             onChangeText={(val) => textInputChange(val)}

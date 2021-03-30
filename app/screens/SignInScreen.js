@@ -13,7 +13,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 
 export default function SignInScreen({ navigation }) {
-  console.log("signIn Screen");
   // send data
 
   // const [isSubmit, setSubmit] = useState(false);
@@ -57,8 +56,12 @@ export default function SignInScreen({ navigation }) {
       .then((response) => response.json())
       .then((responseJson) => {
         var myJSON = JSON.stringify(responseJson);
-        if (JSON) {
-          navigation.navigate("location");
+        if (responseJson == false) {
+          Alert.alert("Check your email for Variffication");
+
+          // navigation.navigate("location");
+        } else {
+          Alert.alert("Correct your cridentials and try again");
         }
         //else {
         //   // navigation.navigate("location");
@@ -70,8 +73,8 @@ export default function SignInScreen({ navigation }) {
         //   () => setMessage({ message: "Yeey will dissapear in 2 sec" }),
         //   2000
         // );
-        Alert.alert(myJSON);
-        console.log(myJSON);
+        // Alert.alert(myJSON);
+        // console.log(myJSON);
       })
       .catch((error) => {
         console.error(error);
@@ -271,7 +274,7 @@ export default function SignInScreen({ navigation }) {
               Register
             </Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             onPress={() => navigation.navigate("SignUpScreen")}
             style={[
               styles.signIn,
@@ -292,7 +295,7 @@ export default function SignInScreen({ navigation }) {
             >
               Sign In
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
     </View>

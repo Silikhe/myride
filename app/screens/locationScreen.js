@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import SearchPlaces from "../components/searchPlaces";
 import * as Location from "expo-location";
+import * as IntentLauncher from "expo-intent-launcher";
 import User from "../components/userLoc";
 import * as Permissions from "expo-permissions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Placesearch from "react-native-placesearch";
 import API_KEY from "../../API_KEY";
+// import Geolocation from "@react-native-community/geolocation";
 import DatePicker from "react-native-datepicker";
 import {
   Keyboard,
@@ -32,50 +34,160 @@ const locationScreen = ({ route, navigation }) => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [date, setDate] = useState("");
+  const [id, setId] = useState();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  console.log(pickup);
-  console.log(date);
-  console.log(location);
+  // let myId = route.params.id;
+  let dated = "2020-03-31";
+  // setId(myId);
+  // console.log(date);
+  // console.log(pickup);
+  // console.log(date);
+  // const [currentLongitude, setCurrentLongitude] = useState("...");
+  // const [currentLatitude, setCurrentLatitude] = useState("...");
+  // const [locationStatus, setLocationStatus] = useState("");
+
+  // useEffect(() => {
+  //   const requestLocationPermission = async () => {
+  //     if (Platform.OS === "ios") {
+  //       getOneTimeLocation();
+  //       subscribeLocationLocation();
+  //     } else {
+  //       try {
+  //         const granted = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //           {
+  //             title: "Location Access Required",
+  //             message: "This App needs to Access your location",
+  //           }
+  //         );
+  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //           //To Check, If Permission is granted
+  //           getOneTimeLocation();
+  //           subscribeLocationLocation();
+  //         } else {
+  //           setLocationStatus("Permission Denied");
+  //         }
+  //       } catch (err) {
+  //         console.warn(err);
+  //       }
+  //     }
+  //   };
+  //   requestLocationPermission();
+  //   return () => {
+  //     Geolocation.clearWatch(watchID);
+  //   };
+  // }, []);
+
+  // const getOneTimeLocation = () => {
+  //   setLocationStatus("Getting Location ...");
+  //   Geolocation.getCurrentPosition(
+  //     //Will give you the current location
+  //     (position) => {
+  //       setLocationStatus("You are Here");
+
+  //       //getting the Longitude from the location json
+  //       const currentLongitude = JSON.stringify(position.coords.longitude);
+
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = JSON.stringify(position.coords.latitude);
+
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
+
+  //       //Setting Longitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     (error) => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       timeout: 30000,
+  //       maximumAge: 1000,
+  //     }
+  //   );
+  // };
+
+  // const subscribeLocationLocation = () => {
+  //   watchID = Geolocation.watchPosition(
+  //     (position) => {
+  //       //Will give you the location on location change
+
+  //       setLocationStatus("You are Here");
+  //       console.log(position);
+
+  //       //getting the Longitude from the location json
+  //       const currentLongitude = JSON.stringify(position.coords.longitude);
+
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = JSON.stringify(position.coords.latitude);
+
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
+
+  //       //Setting Latitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     (error) => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       maximumAge: 1000,
+  //     }
+  //   );
+  // };
+
+  // console.log(Location.getCurrentPositionAsync({}));
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
+      // IntentLauncher.startActivityAsync(
+      //   IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+      // );
+      // let loc = Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+      // alert(loc);
+      // if (status !== "granted") {
+      //   setErrorMsg("Permission to access location was denied");
+      //   return;
+      // }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let loca = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      console.log(loca);
     })();
   }, []);
 
-  let loc;
-  if (errorMsg) {
-    alert(errorMsg);
-  } else if (location) {
-    loc = JSON.stringify(location);
-    console.log(location);
-  }
+  // let loc;
+  // if (errorMsg) {
+  //   alert(errorMsg);
+  // } else if (location) {
+  //   loc = JSON.stringify(location);
+  //   console.log(location);
+  // }
+  // alert(date);
 
   const passengerBook = () => {
-    fetch("http://localhost/myride/api/api/passengerbook", {
+    fetch("http://192.168.122.1/myride/api/api/passengerplace", {
       method: "post",
       header: {
         Accept: "application/json",
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        pickup: pickup,
-        // destination: destination,
-        date: date,
+        pickupLocation: pickup,
+        destination: destination,
+        date: dated,
+        userId: 1,
       }),
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // () => navigation.navigate("location");
-        // alert(responseJson);
+        // var myJSON = JSON.stringify(responseJson);
+        navigation.navigate("available");
+        // alert(myJSON);
       })
       .catch((error) => {
         console.error(error);
@@ -83,10 +195,6 @@ const locationScreen = ({ route, navigation }) => {
   };
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -101,7 +209,6 @@ const locationScreen = ({ route, navigation }) => {
   };
 
   const handleConfirm = (date) => {
-    // alert("You have booked your trip: ", date);
     hideDatePicker();
   };
 
@@ -185,9 +292,7 @@ const locationScreen = ({ route, navigation }) => {
               date={date} // Initial date from state
               mode="date" // The enum of date, datetime and time
               placeholder="select date"
-              format="DD-MM-YYYY"
-              // minDate={Date()}
-              // maxDate="01-01-2019"
+              format="YYYY-MM-DD"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{
@@ -211,11 +316,7 @@ const locationScreen = ({ route, navigation }) => {
                 console.log(date);
               }}
             />
-            <CustomButton
-              // onPress={passengerBook()}
-              onPress={() => navigation.navigate("available")}
-              title="Continue"
-            />
+            <CustomButton onPress={() => passengerBook()} title="Continue" />
           </View>
           <View>
             <View style={styles.footerWords}>

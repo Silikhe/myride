@@ -1,28 +1,113 @@
-import React, { useState } from "react";
-import Font from "react-native-vector-icons/FontAwesome";
-import { Picker } from "@react-native-picker/picker";
-import Isto from "react-native-vector-icons/Fontisto";
+import React, { useState, useEffect } from "react";
+import * as IntentLauncher from "expo-intent-launcher";
+import SearchPlaces from "../components/searchPlaces";
+import * as Location from "expo-location";
+import User from "../components/userLoc";
+import * as Permissions from "expo-permissions";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Placesearch from "react-native-placesearch";
+import API_KEY from "../../API_KEY";
+import DatePicker from "react-native-datepicker";
 import {
+  Keyboard,
   Text,
   StyleSheet,
-  TextInput,
   Dimensions,
   View,
+  Image,
   SafeAreaView,
+  TextInput,
+  Alert,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from "react-native-vector-icons/Feather";
+import Font from "react-native-vector-icons/FontAwesome";
+import Isto from "react-native-vector-icons/Fontisto";
 import CustomButton from "../components/CustomeButton";
-import MapViewDirections from "react-native-maps-directions";
 import mapStyle from "../../styles";
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
-import API_KEY from "../../API_KEY";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
-import { color } from "react-native-reanimated";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function driverBook({ navigation }) {
-  const [selectedLanguage, setSelectedLanguage] = useState();
+const driverBook = ({ route, navigation }) => {
+  // IntentLauncher.startActivityAsync(
+  //   IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+  // );
+
+  const [pickup, setPickup] = useState("");
+  const [destination, setDestination] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState();
+  const [errorMsg, setErrorMsg] = useState(null);
+  // console.log(pickup);
+  // console.log(date);
+  // console.log(location);
+  let dated = "2020-03-31";
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+  // alert(location);
+
+  // let loc;
+  // if (errorMsg) {
+  //   alert(errorMsg);
+  // } else if (location) {
+  //   loc = JSON.stringify(location);
+  //   console.log(location);
+  // }
+
+  const driverPlace = () => {
+    fetch("http://192.168.122.1/myride/api/api/driverBook", {
+      method: "post",
+      header: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        // 'carId' => $data['carId'],
+        riderId: 1,
+        pickupLocation: pickup,
+        destination: destination,
+        date: dated,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert("Your trip has beean booked successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const pickChange = (val) => {
+    setPickup(val);
+  };
+
+  const destinationChange = (val) => {
+    setDestination(val);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -37,54 +122,35 @@ export default function driverBook({ navigation }) {
         }}
         customMapStyle={mapStyle}
       >
-        <MapViewDirections
-          origin={{ latitude: 37.78885, longitude: -122.4325 }}
-          destination={{ latitude: 37.79395, longitude: -122.4325 }}
-          apikey={API_KEY}
-          mode="WALKING"
-          strokeColor="#c4c4c4"
-          strokeWidth={4}
-          lineDashPattern={[6, 6]}
-        />
-        <Marker coordinate={{ latitude: 37.78885, longitude: -122.4325 }}>
+        <Marker coordinate={{ latitude: 37.78825, longitude: -122.4325 }}>
           <View
             style={[
-              styles.greenWrapper,
-              { backgroundColor: "rgba(2, 213, 155, .4)" },
+              styles.ourWrapper,
+              { backgroundColor: "rgba(2, 213, 155, .2)" },
             ]}
           >
-            <View
-              style={[styles.greenDot, { backgroundColor: "rgb(2, 213, 155)" }]}
-            />
-          </View>
-        </Marker>
-        <Marker coordinate={{ latitude: 37.79395, longitude: -122.4325 }}>
-          <View
-            style={[
-              styles.greenWrapper,
-              { backgroundColor: "rgba(247, 70, 86, .4)" },
-            ]}
-          >
-            <View
-              style={[styles.greenDot, { backgroundColor: "rgb(247, 70, 86)" }]}
-            />
+            <Isto name="car" size={35} style={{ color: "#000" }} />
           </View>
         </Marker>
       </MapView>
       <View>
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
-            <Icon name="menu" size={24} />
-            <Icon name="x" size={24} />
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <View style={[styles.greenWrapper, { backgroundColor: "#fff" }]}>
+                <Icon name="menu" size={24} />
+              </View>
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </View>
+
       <View style={styles.cartegoryWrapper}>
         <View style={styles.footerDescription}>
           <View style={styles.card}>
             <View style={styles.drop}>
-              <Text style={styles.dropText}>Select Location</Text>
-              <TouchableOpacity>
+              <Text style={styles.dropText}>Happy to see you</Text>
+              <TouchableOpacity onPress={Keyboard.dismiss}>
                 <Icon name="x" size={24} />
               </TouchableOpacity>
             </View>
@@ -94,58 +160,70 @@ export default function driverBook({ navigation }) {
                 <TextInput
                   placeholder="Where are you going? "
                   placeholderTextColor="#afb1b6"
-                />
+                  onChangeText={(val) => destinationChange(val)}
+                ></TextInput>
               </View>
               <View>
-                <Font name="car" size={20} color="#c4c4c4" />
+                <Font name="car" size={15} color="#c4c4c4" />
               </View>
             </View>
             <View style={styles.search}>
               <View style={styles.inputWrapper}>
                 <View style={[styles.blackDot, { backgroundColor: "green" }]} />
                 <TextInput
-                  placeholder="Select you Destination   "
+                  placeholder="Enter your pickup point "
                   placeholderTextColor="#afb1b6"
+                  onChangeText={(val) => pickChange(val)}
                 />
               </View>
               <View>
-                <Isto
-                  name="map-marker-alt"
-                  size={22}
-                  style={styles.bottomCardIcon}
-                />
+                <Isto name="map-marker-alt" size={21} color="#c4c4c4" />
               </View>
             </View>
-            <View style={styles.search}>
-              <View style={styles.inputWrapper}>
-                <View style={[styles.blackDot, { backgroundColor: "red" }]} />
-                <TextInput
-                  placeholder="Enter a pickup point "
-                  placeholderTextColor="#afb1b6"
-                />
-              </View>
-              <View>
-                <Isto name="plus" size={22} style={styles.bottomCardIcon} />
-              </View>
-            </View>
-          </View>
-          <View style={styles.price}>
-            <View>
-              <CustomButton
-                style={{
-                  padding: 100,
-                  width: "100%",
-                }}
-                onPress={() => navigation.navigate("passenger")}
-                title="Book Now"
-              />
-            </View>
+            {/* <DatePicker
+              style={styles.datePickerStyle}
+              date={date} // Initial date from state
+              mode="date" // The enum of date, datetime and time
+              placeholder="select date"
+              format="DD-MM-YYYY"
+              // minDate={Date()}
+              // maxDate="01-01-2019"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  //display: 'none',
+                  position: "absolute",
+                  left: 0,
+                  top: -18,
+                  size: 50,
+                  marginLeft: 20,
+                },
+                dateInput: {
+                  position: "absolute",
+                  top: -22,
+                  width: 180,
+                  left: 66,
+                },
+              }}
+              onDateChange={(date) => {
+                setDate(date);
+                console.log(date);
+              }}
+            /> */}
+            <CustomButton
+              // onPress={passengerBook()}
+              onPress={driverPlace()}
+              title="Place A Ride"
+            />
           </View>
         </View>
       </View>
     </View>
   );
-}
+};
+
+export default driverBook;
 
 const styles = StyleSheet.create({
   map: {
@@ -157,27 +235,48 @@ const styles = StyleSheet.create({
   },
   card: {
     borderColor: "#efefef",
-    marginHorizontal: -100,
-
-    padding: 10,
+    marginHorizontal: -170,
+    padding: 20,
     borderWidth: 1,
     borderRadius: 20,
     marginTop: 5,
   },
+  ourWrapper: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+
   drop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
 
+  greenWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+
   dropText: {
     fontWeight: "bold",
     color: "#B48900",
   },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 20,
+  },
 
   search: {
     marginVertical: 10,
-    padding: 15,
+    padding: 12,
     backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -227,7 +326,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
 
-  container: { marginHorizontal: 50, marginTop: 25 },
+  container: { marginHorizontal: 30, marginTop: 25 },
   header: {
     justifyContent: "space-between",
     flexDirection: "row",
@@ -236,12 +335,13 @@ const styles = StyleSheet.create({
 
   cartegoryWrapper: {
     width: "100%",
-    height: "50%",
+    height: "45%",
     position: "absolute",
     bottom: 0,
+    // borderRadius: 20,
     alignItems: "center",
-    paddingHorizontal: 2,
-    paddingVertical: 5,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     backgroundColor: "#fff",
   },
 
@@ -255,26 +355,26 @@ const styles = StyleSheet.create({
 
   firstText: {
     fontWeight: "bold",
-    color: "#B48900",
-    fontSize: 20,
-    paddingRight: 100,
+    color: "#000",
+    fontSize: 30,
+    paddingRight: 60,
   },
 
   thirdText: {
-    fontWeight: "bold",
+    // fontWeight: "medium",
     color: "#000",
-    fontSize: 25,
+    fontSize: 20,
     // paddingRight: 5,
   },
 
-  greenWrapper: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-  },
+  // greenWrapper: {
+  //   width: 30,
+  //   height: 30,
+  //   borderRadius: 30,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   alignSelf: "center",
+  // },
 
   greenDot: {
     width: 10,
@@ -287,6 +387,7 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    marginHorizontal: 20,
+    // width: 20,
+    paddingHorizontal: -20,
   },
 });

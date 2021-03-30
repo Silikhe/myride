@@ -4,6 +4,7 @@ import * as Permissions from "expo-permissions";
 
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Polyline from "@mapbox/polyline";
+import API_KEY from "../../API_KEY";
 
 // import { Marker } from "react-native-maps";
 
@@ -57,7 +58,7 @@ export default class mapScreen extends React.Component {
   async getDirections(startLoc, desLoc) {
     try {
       const resp = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=AIzaSyB5yyswUHaIHefK062Or0u4S5McIZEzpXE`
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=#${API_KEY}`
       );
       const respJson = await resp.json();
       const response = respJson.routes[0];

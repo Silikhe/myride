@@ -124,33 +124,33 @@ const ProfileScreen = () => {
   //     getUser();
   //   }, []);
 
-  //   const takePhotoFromCamera = () => {
-  //     ImagePicker.openCamera({
-  //       compressImageMaxWidth: 300,
-  //       compressImageMaxHeight: 300,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //     }).then((image) => {
-  //       console.log(image);
-  //       const imageUri = Platform.OS === "ios" ? image.sourceURL : image.path;
-  //       setImage(imageUri);
-  //       this.bs.current.snapTo(1);
-  //     });
-  //   };
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    }).then((image) => {
+      console.log(image);
+      const imageUri = Platform.OS === "ios" ? image.sourceURL : image.path;
+      setImage(imageUri);
+      this.bs.current.snapTo(1);
+    });
+  };
 
-  //   const choosePhotoFromLibrary = () => {
-  //     ImagePicker.openPicker({
-  //       width: 300,
-  //       height: 300,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //     }).then((image) => {
-  //       console.log(image);
-  //       const imageUri = Platform.OS === "ios" ? image.sourceURL : image.path;
-  //       setImage(imageUri);
-  //       this.bs.current.snapTo(1);
-  //     });
-  //   };
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    }).then((image) => {
+      console.log(image);
+      const imageUri = Platform.OS === "ios" ? image.sourceURL : image.path;
+      setImage(imageUri);
+      this.bs.current.snapTo(1);
+    });
+  };
 
   //   renderInner = () => (
   //     <View style={styles.panel}>

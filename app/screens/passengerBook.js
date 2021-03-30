@@ -108,21 +108,7 @@ export default class passengerBook extends Component {
               </View>
               <View style={styles.footerWords}>
                 <Text style={[styles.secondText, { color: "#000" }]}>
-                  James Doe
-                </Text>
-                <Text style={styles.secondText}>Nakuru</Text>
-                <Text style={styles.secondText}>pending</Text>
-              </View>
-              <View style={styles.footerWords}>
-                <Text style={[styles.secondText, { color: "#000" }]}>
-                  James Doe
-                </Text>
-                <Text style={styles.secondText}>Nakuru</Text>
-                <Text style={styles.secondText}>pending</Text>
-              </View>
-              <View style={styles.footerWords}>
-                <Text style={[styles.secondText, { color: "#000" }]}>
-                  James Doe
+                  Silas
                 </Text>
                 <Text style={styles.secondText}>Nakuru</Text>
                 <Text style={styles.secondText}>pending</Text>

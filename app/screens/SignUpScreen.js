@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
   TextInput,
   Button,
 } from "react-native";
@@ -34,13 +35,17 @@ export default function SignUpScreen({ navigation, route }) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // var id = 1;
+        // alert(responseJson);
+        //here we will get our id
+        var id = 1;
         var myJSON = JSON.stringify(responseJson);
-        // alert(myJSON[0].message);
-        if (myJSON) {
-          alert("Incorrect username or password.");
-          console.log("you are remaining on this screen");
-          navigation.push("location");
+        console.log(myJSON);
+        if (responseJson === true) {
+          Alert.alert("Confirm Your login details and Try again");
+        } else {
+          navigation.push("location", {
+            id: id,
+          });
         }
       })
       .catch((error) => {

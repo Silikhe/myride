@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  Alert,
   TouchableOpacity,
   View,
   SafeAreaView,
@@ -15,12 +16,38 @@ import MapViewDirections from "react-native-maps-directions";
 import mapStyle from "../../styles";
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
-const API_KEY = "AIzaSyB5yyswUHaIHefK062Or0u4S5McIZEzpXE";
+import API_KEY from "../../API_KEY";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { color } from "react-native-reanimated";
 
 export default function bookScreen({ navigation }) {
   const [selectedLanguage, setSelectedLanguage] = useState();
+  let dated = "2020-03-31";
+
+  const driverPlace = () => {
+    fetch("http://192.168.122.1/myride/api/api/bookings", {
+      method: "post",
+      header: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        passengerId: 1,
+        status: true,
+        bookingId: 1,
+        amount: 3000,
+        riderId: 1,
+        date: dated,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert("Your trip has beean booked successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -107,8 +134,8 @@ export default function bookScreen({ navigation }) {
                   setSelectedLanguage(itemValue)
                 }
               >
-                <Picker.Item label="Mpesa" value="mpesa" />
                 <Picker.Item label="Cash" value="cash" />
+                <Picker.Item label="Mpesa" value="mpesa" />
               </Picker>
             </View>
           </View>
@@ -117,7 +144,7 @@ export default function bookScreen({ navigation }) {
               style={{
                 backgroundColor: "#000",
               }}
-              onPress={() => navigation.navigate("location")}
+              onPress={() => driverPlace()}
               title="BOOK"
             />
           </View>

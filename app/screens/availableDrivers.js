@@ -23,13 +23,13 @@ const { width, height } = Dimensions.get("screen");
 import faker from "faker";
 
 faker.seed(10);
-const DATA = [...Array(10).keys()].map((_, i) => {
+const DATA = [...Array(1).keys()].map((_, i) => {
   return {
     key: faker.random.uuid(),
     image: `https://randomuser.me/api/portraits/${faker.helpers.randomize([
       "women",
       "men",
-    ])}/${faker.random.number(60)}.jpg`,
+    ])}/${faker.random.number(30)}.jpg`,
     name: faker.name.findName(),
     jobTitle: faker.name.jobTitle(),
     email: faker.internet.email(),
@@ -108,7 +108,7 @@ export default availableDrivers = ({ navigation }) => {
                   <Text
                     style={{ fontSize: 22, fontWeight: "700", marginLeft: 25 }}
                   >
-                    Silas Silikhe
+                    Silas
                   </Text>
                   <View style={styles.section}>
                     <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -129,7 +129,7 @@ export default availableDrivers = ({ navigation }) => {
                   <View style={{ flexDirection: "row", marginTop: 5 }}>
                     <View style={{ flexDirection: "row" }}>
                       <Icon name="phone" size={18} />
-                      <Text style={styles.title}>+254 7067 45581</Text>
+                      <Text style={styles.title}>+254706745581</Text>
                     </View>
                     <View style={{ marginLeft: 25 }}>
                       <Text style={styles.title2}>7 min</Text>

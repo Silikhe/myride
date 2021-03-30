@@ -25,17 +25,22 @@ import { AuthContext } from "./context";
 
 const DrawerT = createDrawerNavigator();
 
-const CustomDrawer = (props) => {
+const CustomDrawer = (props, { navigation }) => {
   const paperTheme = useTheme();
 
   const [isEnabled, setIsEnabled] = useState(false);
-  console.log(isEnabled);
-  if (isEnabled) {
-    console.log("Hurray");
-    () => {
+  // console.log(isEnabled);
+
+  const switched = () => {
+    if (!isEnabled) {
       props.navigation.navigate("Driver");
-    };
-  }
+      // console.log("Hurray");
+    } else {
+      // props.navigation.navigate("passenger");
+      alert("ill");
+    }
+  };
+
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
     <View style={{ flex: 1 }}>
@@ -75,7 +80,7 @@ const CustomDrawer = (props) => {
               )}
               label="Home"
               onPress={() => {
-                props.navigation.navigate("Home");
+                props.navigation.navigate("location");
               }}
             />
             <DrawerItem
@@ -84,16 +89,16 @@ const CustomDrawer = (props) => {
               )}
               label="Payment"
               onPress={() => {
-                props.navigation.navigate("Profile");
+                props.navigation.navigate("available");
               }}
             />
             <DrawerItem
               icon={({ color, size }) => (
                 <Fe name="archive" color={color} size={size} />
               )}
-              label="Wallet"
+              label="Trips"
               onPress={() => {
-                props.navigation.navigate("BookmarkScreen");
+                props.navigation.navigate("launcher");
               }}
             />
             <DrawerItem
@@ -102,7 +107,7 @@ const CustomDrawer = (props) => {
               )}
               label="Settings"
               onPress={() => {
-                props.navigation.navigate("SettingsScreen");
+                props.navigation.navigate("profile");
               }}
             />
             <DrawerItem
@@ -123,10 +128,11 @@ const CustomDrawer = (props) => {
                 thumbColor={isEnabled ? "#B48900" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={
-                  toggleSwitch
-                  // () => {
-                  //   props.navigation.navigate("Driver");
-                  // }
+                  (toggleSwitch,
+                  () => {
+                    switched();
+                    // navigation.navigate("Driver");
+                  })
                 }
                 value={isEnabled}
               />
@@ -158,7 +164,6 @@ const DrawerNavigator = (props) => {
       <DrawerT.Screen name="Pase" component={RootStackScreen} />
       <DrawerT.Screen name="Driver" component={DriverStackScreen} />
       <DrawerT.Screen name="Other" component={PassStack} />
-      {/* <DrawerT.Screen name="Profile" component={ProScreen} /> */}
     </DrawerT.Navigator>
   );
 };

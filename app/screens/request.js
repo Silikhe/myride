@@ -14,7 +14,7 @@ import MapViewDirections from "react-native-maps-directions";
 import mapStyle from "../../styles";
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
-const API_KEY = "AIzaSyB5yyswUHaIHefK062Or0u4S5McIZEzpXE";
+import API_KEY from "../../API_KEY";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { color } from "react-native-reanimated";
 

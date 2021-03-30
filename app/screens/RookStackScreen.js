@@ -16,8 +16,8 @@ import locationScreen from "./locationScreen";
 import SignInScreen from "./SignInScreen";
 import SignUpScreen from "./SignUpScreen";
 import phoneScreen from "./phoneScreen";
+import ProfileScreen from "./profileScreen";
 import LaunchScreen from "./LaunchScreen";
-import mapScreen from "./mapScreen";
 import availableDrivers from "./availableDrivers";
 import DatePick from "./DatePick";
 import Book from "./bookScreen";
@@ -48,12 +48,12 @@ const RootStackScreen = ({ navigation }) => (
       <RootStack.Screen name="available" component={availableDrivers} />
       <RootStack.Screen name="phone" component={phoneScreen} />
       {/* <RootStack.Screen name="map" component={mapScreen} /> */}
-      {/* <RootStack.Screen name="DatePick" component={DatePick} /> */}
-      {/* <RootStack.Screen
+      <RootStack.Screen name="profile" component={ProfileScreen} />
+      <RootStack.Screen
         header="none"
         name="launcher"
         component={LaunchScreen}
-      /> */}
+      />
       <RootStack.Screen name="SignInScreen" component={SignInScreen} />
       <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
     </RootStack.Navigator>
