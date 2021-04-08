@@ -3,12 +3,14 @@ Car pooling app that allow people going the same route to earn more
 
 ### Stacks used
 1. Frontend -> React native == expo
-2. Backend -> PHP == yii2 framework
+2. Backend -> PHP == [Yii2 framework](https://github.com/Silikhe/myride-api/)
+3. Database -> mySql
+4. Designing -> figma == [Designs](https://www.figma.com/file/701rd3f8BuTHRPa0NdzWuA/myride?node-id=0%3A1)
 
 ### Website
 1. My ride website [navigate to website](https://myride.com)
-2. [Source code](https://myride.com)
-3. Stack -> yii2
+2. [Source code](https://github.com/Silikhe/myride-api)
+3. Stack -> PHP (Yii2 framework)
 
 | [![Screenshot_1616818253](https://user-images.githubusercontent.com/65366942/114098570-32eada80-98ca-11eb-9ba8-ae904e49262d.png )]()  | [![Screenshot_1616801636](https://user-images.githubusercontent.com/65366942/114098603-41d18d00-98ca-11eb-81d2-22f771a8b9aa.png)]() | [![Screenshot_1616801662](https://user-images.githubusercontent.com/65366942/114098689-6299e280-98ca-11eb-92f7-ddfcef3e9309.png)]() |[![Screenshot_1616832122](https://user-images.githubusercontent.com/65366942/114098758-7f361a80-98ca-11eb-89b1-6ea0181ed8fd.png)]() |[![Screenshot_1616801688](https://user-images.githubusercontent.com/65366942/114104405-772ea880-98d3-11eb-85c6-e205690bfd8a.png)]() |
 |:---:|:---:|:---:|:---:| :---:|
