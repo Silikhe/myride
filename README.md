@@ -1,4 +1,4 @@
-# myride
+# Myride
 Car pooling app that allow people going the same route to earn more
 
 ### Stacks used
